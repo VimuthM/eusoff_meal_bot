@@ -7,3 +7,7 @@ const telegramUrl = "https://api.telegram.org/bot" + botKey;
 function setWebHook() {
     UrlFetchApp.fetch(telegramUrl + "/setWebHook?url=" + webhookLink);
 }
+
+function deleteWebHook() {
+    UrlFetchApp.fetch(telegramUrl + "/deleteWebHook");
+}
