@@ -7,7 +7,7 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --check .",
     "format:fix": "prettier --write .",
-    "check": "yarn run typecheck && yarn run lint && yarn run format",
+    "check": "yarn run lint && yarn run format",
     "fix": "yarn run lint:fix && yarn run format:fix"
   },
   "husky": {
