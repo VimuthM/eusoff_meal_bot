@@ -8,8 +8,6 @@ It uses Google Apps Script as a webhook for the telegram bot.
 
 Done by [@glennjs](https://github.com/glennljs)
 
----
-
 ## Requirements
 
 To use this, you'll need.
@@ -17,8 +15,6 @@ To use this, you'll need.
 1. [Telegram bot Token](https://core.telegram.org/bots)
 2. [A google account](https://script.google.com/home)
 3. [Spreadsheet IDs](https://developers.google.com/sheets/api/guides/concepts#spreadsheet_id) to the breakfast and dinner menus in google sheet format (upload [files from this folder](menu) to google drive and convert to google sheets files through `File > Save as Google Sheets`)
-
----
 
 ## Installation
 
@@ -37,9 +33,9 @@ To use this, you'll need.
 
    Take note of the deployment id after `Created version x`
 
-   ```console
+   ```
    Created version 1.
-   - <<YOUR DEPLOYMENT ID HERE> @1.
+   - <<YOUR DEPLOYMENT ID HERE>> @1.
    ```
 
 8. Now set the deployment id in `secret.js` along with the bot token and sheet ids.
@@ -64,8 +60,6 @@ To use this, you'll need.
 14. Open your telegram bot! It should show you the breakfast and dinner for the current week!
 
     ![telegram bot](media/finalSuccess.png)
-
----
 
 ## Tips
 
