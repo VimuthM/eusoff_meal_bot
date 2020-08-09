@@ -8,6 +8,8 @@
   },
   "rules": {
     "no-unused-vars": "off",
-    "no-undef": "off"
+    "no-undef": "off",
+    "space-before-function-paren":["error", "never"],
+    "semi":"off"
   }
 }
