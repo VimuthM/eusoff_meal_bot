@@ -1,4 +1,4 @@
-const Message = function(chatId, text, replyMarkup = null) {
+const Message = function (chatId, text, replyMarkup = null) {
   this.chat_id = chatId;
   this.text = text;
   this.parse_mode = 'HTML';
@@ -8,11 +8,11 @@ const Message = function(chatId, text, replyMarkup = null) {
   }
 };
 
-const InlineKeyboard = function(inlineKeyboard) {
+const InlineKeyboard = function (inlineKeyboard) {
   this.inline_keyboard = inlineKeyboard;
 };
 
-const InlineKeyboardButton = function(text, callbackData = null) {
+const InlineKeyboardButton = function (text, callbackData = null) {
   this.text = text;
 
   if (callbackData == null) {
@@ -22,7 +22,7 @@ const InlineKeyboardButton = function(text, callbackData = null) {
   }
 };
 
-const Breakfast = function(
+const Breakfast = function (
   breadsCakes = [
     'Assorted Buns/Cakes',
     'Assorted Sandwiches',
@@ -41,7 +41,7 @@ const Breakfast = function(
   dailySpecials = 'Homemade Lor Mee',
   drinks = 'Coffee and Tea'
 ) {
-  this.get = function() {
+  this.get = function () {
     return {
       'Breads and Cakes': breadsCakes,
       'Continental Delights': continentalDelights,
@@ -56,7 +56,7 @@ const Breakfast = function(
   };
 };
 
-const Dinner = function(
+const Dinner = function (
   rice = 'Steamed White Rice',
   pork = 'Kam Hiong Pork',
   chicken = 'Ginger Scallion Chicken',
@@ -71,7 +71,7 @@ const Dinner = function(
   fruitDessert = 'Chilled Almond Jelly with Longan',
   drinks = 'Cordial Drink'
 ) {
-  this.get = function() {
+  this.get = function () {
     return {
       Rice: rice,
       Pork: pork,
@@ -86,13 +86,13 @@ const Dinner = function(
   };
 };
 
-const SpecialDinner = function(
+const SpecialDinner = function (
   set1 = 'Penne Tomato Cream Sauce, Rosemary Chicken Chop & Mashed Potatoes',
   set2 = 'Ma La Xiang Guo Set',
   fruitDessert = 'Banana',
   drink = 'Cordial Drink'
 ) {
-  this.get = function() {
+  this.get = function () {
     return {
       'Set A': set1,
       'Set B': set2,

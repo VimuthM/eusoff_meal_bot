@@ -9,7 +9,7 @@
   "rules": {
     "no-unused-vars": "off",
     "no-undef": "off",
-    "space-before-function-paren": ["error", "never"],
+    "space-before-function-paren": "off",
     "semi": "off",
     "comma-dangle": [
       "error",
