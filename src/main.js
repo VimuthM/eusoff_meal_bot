@@ -110,17 +110,18 @@ function parseMessage(chatId, text) {
 function parseMeal(meal) {
   let outputString = '';
   for (var key of Object.keys(meal)) {
-    outputString += '<b>' + key + '</b>\n';
+    outputString += '<b>' + key + '</b> - ';
     if (Array.isArray(meal[key])) {
-      meal[key].forEach((element) => {
-        outputString += element[0] + '\n';
-      });
+      const mealSelection = meal[key].reduce((result, element) => {
+        return result + element.trim() + ', ';
+      }, '').slice(0, -2);
+      outputString += mealSelection;
     } else {
-      outputString += meal[key] + '\n';
+      outputString += meal[key];
     }
-    outputString += '\n';
+    outputString += '\n\n';
   }
-  return outputString;
+  return outputString || 'No meal\n\n';
 }
 
 // Gets details of breakfast from the main sheets
