@@ -2,9 +2,11 @@
 // Distinguishes between callback query and messages
 // returns void
 function doPost(e) {
+    // for further security, only accept requests from those who know the bot token
+    if (e.parameter['bot'] !== botToken) return;
     const contents = JSON.parse(e.postData.contents);
     let chat_id, text;
-
+    
     if (contents.callback_query) {
         chat_id = contents.callback_query.message.chat.id;
         text = contents.callback_query.data;
@@ -14,6 +16,13 @@ function doPost(e) {
         text = contents.message.text;
         parseMessage(chat_id, text);
     }
+}
+
+function doGet(e) {
+    deleteWebHook();
+    const response = setWebHook();
+    if (response.getResponseCode() !== 200) return HtmlService.createHtmlOutput(`<p>webhook not set :(</p>`)
+    return HtmlService.createHtmlOutput(`<p>webhook set!</p>`)
 }
 
 // Function to send message chat
