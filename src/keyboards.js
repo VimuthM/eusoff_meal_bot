@@ -1,6 +1,6 @@
 const mealKeyboard = new InlineKeyboard([
   [new InlineKeyboardButton('Breakfast', '/getbreakfast')],
-  [new InlineKeyboardButton('Dinner', '/getdinner')]
+  [new InlineKeyboardButton('Dinner', '/getdinner')],
 ]);
 
 const dinnerKeyboard = new InlineKeyboard([
@@ -9,7 +9,7 @@ const dinnerKeyboard = new InlineKeyboard([
   [new InlineKeyboardButton('Wednesday', '>D3Wednesday')],
   [new InlineKeyboardButton('Thursday', '>D4Thursday')],
   [new InlineKeyboardButton('Friday', '>D5Friday')],
-  [new InlineKeyboardButton('Sunday', '>D6Sunday')]
+  [new InlineKeyboardButton('Sunday', '>D6Sunday')],
 ]);
 
 const breakfastKeyboard = new InlineKeyboard([
@@ -18,5 +18,5 @@ const breakfastKeyboard = new InlineKeyboard([
   [new InlineKeyboardButton('Wednesday', '>B3Wednesday')],
   [new InlineKeyboardButton('Thursday', '>B4Thursday')],
   [new InlineKeyboardButton('Friday', '>B5Friday')],
-  [new InlineKeyboardButton('Saturday', '>B6Saturday')]
+  [new InlineKeyboardButton('Saturday', '>B6Saturday')],
 ]);

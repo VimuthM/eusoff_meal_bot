@@ -10,6 +10,7 @@ function doPost(e) {
   if (contents.callback_query) {
     chatId = contents.callback_query.message.chat.id;
     text = contents.callback_query.data;
+    sendMessage(chatId, 'test');
     parseMessage(chatId, text);
   } else {
     chatId = contents.message.chat.id;
@@ -21,7 +22,9 @@ function doPost(e) {
 function doGet(e) {
   deleteWebHook();
   const response = setWebHook();
-  if (response.getResponseCode() !== 200) { return HtmlService.createHtmlOutput('<p>webhook not set :(</p>'); }
+  if (response.getResponseCode() !== 200) {
+    return HtmlService.createHtmlOutput('<p>webhook not set :(</p>');
+  }
   return HtmlService.createHtmlOutput('<p>webhook set!</p>');
 }
 
@@ -31,7 +34,7 @@ function getCurrentWeek() {
   const numberOfDays = Math.floor(
     (currentDate.getTime() - START_DATE.getTime()) / SECONDS_IN_DAY
   );
-  const currentWeek = Math.floor(numberOfDays / 7) % 4 + 1;
+  const currentWeek = (Math.floor(numberOfDays / 7) % 4) + 1;
   return currentWeek;
 }
 
@@ -50,7 +53,7 @@ function sendMessage(chatId, message, keyboard = null) {
   const options = {
     method: 'post',
     contentType: 'application/json',
-    payload: JSON.stringify(data)
+    payload: JSON.stringify(data),
   };
 
   UrlFetchApp.fetch(telegramUrl + '/sendMessage', options);
@@ -91,16 +94,10 @@ function parseMessage(chatId, text) {
   } else if (text[0] === '>') {
     const dayNo = text[2];
     if (text[1] === 'B') {
-      const breakfast = getBreakfast(
-        getCurrentWeek(),
-        parseInt(dayNo)
-      );
+      const breakfast = getBreakfast(getCurrentWeek(), parseInt(dayNo));
       sendMessage(chatId, parseMeal(breakfast));
     } else if (text[1] === 'D') {
-      const dinner = getDinner(
-        getCurrentWeek(),
-        parseInt(dayNo)
-      );
+      const dinner = getDinner(getCurrentWeek(), parseInt(dayNo));
       sendMessage(chatId, parseMeal(dinner));
     } else {
       sendMessage(chatId, 'Invalid request');

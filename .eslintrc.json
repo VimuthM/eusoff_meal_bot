@@ -9,7 +9,17 @@
   "rules": {
     "no-unused-vars": "off",
     "no-undef": "off",
-    "space-before-function-paren":["error", "never"],
-    "semi":"off"
+    "space-before-function-paren": ["error", "never"],
+    "semi": "off",
+    "comma-dangle": [
+      "error",
+      {
+        "arrays": "always-multiline",
+        "objects": "always-multiline",
+        "imports": "always-multiline",
+        "exports": "always-multiline",
+        "functions": "never"
+      }
+    ]
   }
 }
