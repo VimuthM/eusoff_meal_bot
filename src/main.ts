@@ -1,9 +1,5 @@
-// Function to process incoming webhook post requests
-// Distinguishes between callback query and messages
-// returns void
 function doPost(e) {
   // for further security, only accept requests from those who know the bot token
-  if (e.parameter.bot !== botToken) return;
   const contents = JSON.parse(e.postData.contents);
   let chatId, text;
 
@@ -15,6 +11,7 @@ function doPost(e) {
   } else {
     chatId = contents.message.chat.id;
     text = contents.message.text;
+    sendMessage(chatId, 'test');
     parseMessage(chatId, text);
   }
 }
@@ -41,27 +38,26 @@ function getCurrentWeek() {
 // Function to send message chat
 // Optional inline keyboard
 // returns void
-function sendMessage(chatId, message, keyboard = null) {
-  let data;
-
-  if (keyboard == null) {
-    data = new Message(chatId, message);
-  } else {
-    data = new Message(chatId, message, keyboard);
-  }
+function sendMessage(chatId: number, text: string, replyMarkup?: ReplyMarkup) {
+  const sendMessageData: SendMessageData = {
+    chat_id: chatId,
+    text,
+    reply_markup: replyMarkup,
+    parse_mode: 'HTML',
+  };
 
   const options = {
     method: 'post',
     contentType: 'application/json',
-    payload: JSON.stringify(data),
-  };
+    payload: JSON.stringify(sendMessageData),
+  } as GoogleAppsScript.URL_Fetch.URLFetchRequestOptions;
 
   UrlFetchApp.fetch(telegramUrl + '/sendMessage', options);
 }
 
 // Parses messages and sends the processed output to sendMessage
 // returns void
-function parseMessage(chatId, text) {
+function parseMessage(chatId: number, text: string) {
   if (text[0] === '/') {
     switch (text) {
       case '/get_meals':
@@ -95,7 +91,7 @@ function parseMessage(chatId, text) {
     const dayNo = text[2];
     if (text[1] === 'B') {
       const breakfast = getBreakfast(getCurrentWeek(), parseInt(dayNo));
-      sendMessage(chatId, parseMeal(breakfast));
+      sendMessage(chatId, breakfast ? parseMeal(breakfast) : 'ERROR');
     } else if (text[1] === 'D') {
       const dinner = getDinner(getCurrentWeek(), parseInt(dayNo));
       sendMessage(chatId, parseMeal(dinner));
@@ -107,68 +103,41 @@ function parseMessage(chatId, text) {
 
 // Creates the nicely formatted string from the Meal objects
 // returns String
-function parseMeal(meal) {
-  let outputString = '';
-  for (var key of Object.keys(meal)) {
-    outputString += '<b>' + key + '</b> - ';
-    if (Array.isArray(meal[key])) {
-      const mealSelection = meal[key].reduce((result, element) => {
-        return result + element.trim() + ', ';
-      }, '').slice(0, -2);
-      outputString += mealSelection;
-    } else {
-      outputString += meal[key];
-    }
-    outputString += '\n\n';
-  }
-  return outputString || 'No meal\n\n';
-}
+const parseMeal = (meal: { [x: string]: string }): string => {
+  return Object.keys(meal)
+    .map((currentKey) => `<b>${currentKey}</b> - ${meal[currentKey]}`)
+    .reduce((output, currentMeal) => output + '\n' + currentMeal);
+};
 
 // Gets details of breakfast from the main sheets
 // returns Breakfast object
-function getBreakfast(weekNum, day) {
+const getBreakfast = (week: number, day: number) => {
   const sheet = SpreadsheetApp.openById(breakfastMenuSheetId).getSheetByName(
-    'Week ' + weekNum
+    `Week ${week}`
   );
   const column = String.fromCharCode('B'.charCodeAt(0) + day);
-  return new Breakfast(
-    sheet.getRange(column + '2:' + column + '4').getValues(),
-    sheet.getRange(column + '5').getValue(),
-    sheet.getRange(column + '6').getValue(),
-    sheet.getRange(column + '7:' + column + '9').getValues(),
-    sheet.getRange(column + '10').getValue(),
-    sheet.getRange(column + '11').getValue(),
-    sheet.getRange(column + '12').getValue(),
-    sheet.getRange(column + '13').getValue(),
-    sheet.getRange(column + '14').getValue()
-  ).get();
-}
+  const breakfastData = sheet
+    .getRange(`${column}2:${column}14`)
+    .getValues()
+    .map((row) => String(row[0]).trim());
+
+  return generateBreakfast(breakfastData);
+};
 
 // Gets details of dinner from the main sheets
 // returns Breakfast object
-function getDinner(week, day) {
+const getDinner = (week: number, day: number) => {
   const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(
-    week + 'D'
+    `Week ${week}`
   );
   const column = String.fromCharCode('B'.charCodeAt(0) + day);
-  if (day % 2 === 0) {
-    return new SpecialDinner(
-      sheet.getRange(column + '2').getValue(),
-      sheet.getRange(column + '7').getValue(),
-      sheet.getRange(column + '11').getValue(),
-      sheet.getRange(column + '12').getValue()
-    ).get();
-  } else {
-    return new Dinner(
-      sheet.getRange(column + '2').getValue(),
-      sheet.getRange(column + '3').getValue(),
-      sheet.getRange(column + '4').getValue(),
-      sheet.getRange(column + '5').getValue(),
-      sheet.getRange(column + '6:' + column + '8').getValues(),
-      sheet.getRange(column + '9').getValue(),
-      sheet.getRange(column + '10').getValue(),
-      sheet.getRange(column + '11').getValue(),
-      sheet.getRange(column + '12').getValue()
-    ).get();
+  const dinnerData = sheet
+    .getRange(`${column}2:${column}12`)
+    .getValues()
+    .map((row) => String(row[0]).trim());
+
+  if (isSpecialDinner(day)) {
+    return generateSpecialDinner(dinnerData);
   }
-}
+  return generateDinner(dinnerData);
+};
