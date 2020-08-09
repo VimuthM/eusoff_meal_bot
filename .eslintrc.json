@@ -1,0 +1,13 @@
+{
+  "env": {
+    "es2020": true
+  },
+  "extends": ["standard"],
+  "parserOptions": {
+    "ecmaVersion": 11
+  },
+  "rules": {
+    "no-unused-vars": "off",
+    "no-undef": "off"
+  }
+}
