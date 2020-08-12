@@ -22,7 +22,7 @@ type KeyboardButton = {
 };
 
 type ReplyKeyboardMarkup = {
-  keyboard: KeyboardButton[];
+  keyboard: KeyboardButton[][];
   one_time_keyboard?: boolean;
   selective?: boolean;
 };

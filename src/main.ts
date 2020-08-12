@@ -1,109 +1,62 @@
+let currentUpdate, chat;
 function doPost(e) {
   // for further security, only accept requests from those who know the bot token
   const contents = JSON.parse(e.postData.contents);
-  let chatId, text;
-
+  currentUpdate = contents;
+  chat = contents.message.chat;
+  sendMessage(contents);
   if (contents.callback_query) {
-    chatId = contents.callback_query.message.chat.id;
-    text = contents.callback_query.data;
-    sendMessage(chatId, 'test');
-    parseMessage(chatId, text);
-  } else {
-    chatId = contents.message.chat.id;
-    text = contents.message.text;
-    sendMessage(chatId, 'test');
-    parseMessage(chatId, text);
+    parseCallbackQuery(contents.callback_query.data);
   }
+  parseMessage(contents.message.text);
 }
 
 function doGet(e) {
   deleteWebHook();
-  const response = setWebHook();
-  if (response.getResponseCode() !== 200) {
-    return HtmlService.createHtmlOutput('<p>webhook not set :(</p>');
-  }
-  return HtmlService.createHtmlOutput('<p>webhook set!</p>');
-}
-
-// Get current week
-function getCurrentWeek() {
-  const currentDate = new Date();
-  const numberOfDays = Math.floor(
-    (currentDate.getTime() - START_DATE.getTime()) / SECONDS_IN_DAY
-  );
-  const currentWeek = (Math.floor(numberOfDays / 7) % 4) + 1;
-  return currentWeek;
+  const webHookResponse = setWebHook();
+  const botCommandResponse = setBotCommands();
+  const currentOutput = HtmlService.createHtmlOutput('<p>start</p>');
+  currentOutput.append(webHookResponse.getResponseCode() === 200 ? getWebHook().getContentText() : webHookResponse.getContentText());
+  currentOutput.append(botCommandResponse.getResponseCode() === 200 ? botCommandResponse.getContentText() : botCommandResponse.getContentText());
+  currentOutput.append('<p>' + botCommands.map(command => JSON.stringify(command) )+ '</p>');
+  return currentOutput;
 }
 
 // Function to send message chat
 // Optional inline keyboard
 // returns void
-function sendMessage(chatId: number, text: string, replyMarkup?: ReplyMarkup) {
-  const sendMessageData: SendMessageData = {
-    chat_id: chatId,
-    text,
-    reply_markup: replyMarkup,
-    parse_mode: 'HTML',
-  };
-
-  const options = {
-    method: 'post',
-    contentType: 'application/json',
-    payload: JSON.stringify(sendMessageData),
-  } as GoogleAppsScript.URL_Fetch.URLFetchRequestOptions;
-
-  UrlFetchApp.fetch(telegramUrl + '/sendMessage', options);
-}
 
 // Parses messages and sends the processed output to sendMessage
 // returns void
-function parseMessage(chatId: number, text: string) {
-  if (text[0] === '/') {
-    switch (text) {
-      case '/get_meals':
-      case '/get_meals@EusoffMealBot':
-        sendMessage(
-          chatId,
-          'Would you like to view Breakfast or Dinner?',
-          mealKeyboard
-        );
-        break;
-
-      case '/get_breakfast':
-      case '/get_breakfast@EusoffMealBot':
-        sendMessage(
-          chatId,
-          "Which day's breakfast would you like to view?",
-          breakfastKeyboard
-        );
-        break;
-
-      case '/get_dinner':
-      case '/get_dinner@EusoffMealBot':
-        sendMessage(
-          chatId,
-          "Which day's dinner would you like to view?",
-          dinnerKeyboard
-        );
-        break;
-    }
-  } else if (text[0] === '>') {
-    const dayNo = text[2];
-    if (text[1] === 'B') {
-      const breakfast = getBreakfast(getCurrentWeek(), parseInt(dayNo));
-      sendMessage(chatId, breakfast ? parseMeal(breakfast) : 'ERROR');
-    } else if (text[1] === 'D') {
-      const dinner = getDinner(getCurrentWeek(), parseInt(dayNo));
-      sendMessage(chatId, parseMeal(dinner));
-    } else {
-      sendMessage(chatId, 'Invalid request');
-    }
-  }
+function parseMessage(text: string) {
+  sendMessage('AABB');
+  const endOfCommand = text.indexOf(botName);
+  const commandName = endOfCommand < 0 ? text : text.substring(0, endOfCommand)
+  const command = botCommandDictionary[commandName];
+  command ? command.execute() : botCommandDictionary.default.execute();
 }
+
+const parseCallbackQuery = (callbackData: string) => {
+  sendMessage('AAA');
+  if (callbackData[0] !== '>') return;
+  const dayNo = callbackData[2];
+  if (callbackData[1] === 'B') {
+    const breakfast = getBreakfast(getCurrentWeek(), parseInt(dayNo));
+    sendMessage(parseMeal(breakfast));
+  } else if (callbackData[1] === 'D') {
+    const dinner = getDinner(getCurrentWeek(), parseInt(dayNo));
+    sendMessage(parseMeal(dinner));
+  } else {
+    sendMessage('Invalid request');
+  }
+};
 
 // Creates the nicely formatted string from the Meal objects
 // returns String
-const parseMeal = (meal: { [x: string]: string }): string => {
+const parseMeal = (
+  meal?: BreakfastObject | DinnerObject | SpecialDinnerObject
+): string => {
+  if (!meal) return 'ERROR';
   return Object.keys(meal)
     .map((currentKey) => `<b>${currentKey}</b> - ${meal[currentKey]}`)
     .reduce((output, currentMeal) => output + '\n' + currentMeal);

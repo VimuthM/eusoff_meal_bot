@@ -1,7 +1,6 @@
 const generateBreakfast = (
   breakfastList: string[]
 ): BreakfastObject | undefined => {
-  if (breakfastList.length !== 13) return;
   return {
     'Breads and Cakes': breakfastList.slice(0, 3).join(', '),
     'Continental Delights': breakfastList[3],
@@ -18,7 +17,6 @@ const generateBreakfast = (
 const isSpecialDinner = (day: number) => day % 2 === 0;
 
 const generateDinner = (dinnerList: string[]): DinnerObject | undefined => {
-  if (dinnerList.length !== 11) return;
   return {
     Rice: dinnerList[0],
     Pork: dinnerList[1],
@@ -35,7 +33,6 @@ const generateDinner = (dinnerList: string[]): DinnerObject | undefined => {
 const generateSpecialDinner = (
   dinnerList: string[]
 ): SpecialDinnerObject | undefined => {
-  if (dinnerList.length !== 11) return;
   return {
     'Set A': dinnerList[0],
     'Set B': dinnerList[5],
@@ -52,4 +49,25 @@ const createInlineButtons = (
     text,
     callback_data: callbackData,
   };
+};
+
+const createKeyboardButtons = (text: string): KeyboardButton => {
+  return { text };
+};
+
+// Get current week
+function getCurrentWeek() {
+  const currentDate = new Date();
+  const numberOfDays = Math.floor(
+    (currentDate.getTime() - START_DATE.getTime()) / SECONDS_IN_DAY
+  );
+  const currentWeek = (Math.floor(numberOfDays / 7) % 4) + 1;
+  return currentWeek;
+}
+
+// Get current day of the week
+const getCurrentDay = () => {
+  // getDay() return sunday as 0, monday as 1
+  // Want monday as 1, tuesday as 2, ... sunday as 7
+  return ((new Date().getDay() + 6) % 7) + 1;
 };
