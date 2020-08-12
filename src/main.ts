@@ -16,9 +16,19 @@ function doGet(e) {
   const webHookResponse = setWebHook();
   const botCommandResponse = setBotCommands();
   const currentOutput = HtmlService.createHtmlOutput('<p>start</p>');
-  currentOutput.append(webHookResponse.getResponseCode() === 200 ? getWebHook().getContentText() : webHookResponse.getContentText());
-  currentOutput.append(botCommandResponse.getResponseCode() === 200 ? botCommandResponse.getContentText() : botCommandResponse.getContentText());
-  currentOutput.append('<p>' + botCommands.map(command => JSON.stringify(command) )+ '</p>');
+  currentOutput.append(
+    webHookResponse.getResponseCode() === 200
+      ? getWebHook().getContentText()
+      : webHookResponse.getContentText()
+  );
+  currentOutput.append(
+    botCommandResponse.getResponseCode() === 200
+      ? botCommandResponse.getContentText()
+      : botCommandResponse.getContentText()
+  );
+  currentOutput.append(
+    '<p>' + botCommands.map((command) => JSON.stringify(command)) + '</p>'
+  );
   return currentOutput;
 }
 
@@ -31,7 +41,7 @@ function doGet(e) {
 function parseMessage(text: string) {
   sendMessage('AABB');
   const endOfCommand = text.indexOf(botName);
-  const commandName = endOfCommand < 0 ? text : text.substring(0, endOfCommand)
+  const commandName = endOfCommand < 0 ? text : text.substring(0, endOfCommand);
   const command = botCommandDictionary[commandName];
   command ? command.execute() : botCommandDictionary.default.execute();
 }

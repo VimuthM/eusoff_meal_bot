@@ -1,6 +1,7 @@
-const setWebHook = () => UrlFetchApp.fetch(
-  telegramUrl + '/setWebHook?url=' + webHookLink + '?=' + botToken
-);
+const setWebHook = () =>
+  UrlFetchApp.fetch(
+    telegramUrl + '/setWebHook?url=' + webHookLink + '?=' + botToken
+  );
 
 const getWebHook = () => UrlFetchApp.fetch(telegramUrl + '/getWebHookInfo');
 
@@ -21,7 +22,7 @@ const sendMessage = (text: string, replyMarkup?: ReplyMarkup) => {
   } as GoogleAppsScript.URL_Fetch.URLFetchRequestOptions;
 
   UrlFetchApp.fetch(telegramUrl + '/sendMessage', options);
-}
+};
 
 const setBotCommands = () => {
   const options = {
@@ -30,6 +31,6 @@ const setBotCommands = () => {
     payload: JSON.stringify(botCommands),
   } as GoogleAppsScript.URL_Fetch.URLFetchRequestOptions;
   return UrlFetchApp.fetch(telegramUrl + '/setMyCommands', options);
-}
+};
 
 const getBotCommands = () => UrlFetchApp.fetch(telegramUrl + '/getMyCommands');

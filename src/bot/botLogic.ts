@@ -71,4 +71,4 @@ const botCommands: BotCommand[] = Object.keys(botCommandDictionary)
   .map((key) => ({
     command: key.substring(1),
     description: botCommandDictionary[key].description || '',
-  }))
+  }));
