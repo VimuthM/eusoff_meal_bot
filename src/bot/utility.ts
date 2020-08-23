@@ -36,3 +36,16 @@ const setBotCommands = () => {
 };
 
 const getBotCommands = () => UrlFetchApp.fetch(telegramUrl + '/getMyCommands');
+const answerCallbackQuery = (callbackQueryId: string) => {
+  const answerCallbackQuery: answerCallbackQueryData = {
+    callback_query_id: callbackQueryId,
+  };
+
+  const options = {
+    method: 'post',
+    contentType: 'application/json',
+    payload: JSON.stringify(answerCallbackQuery),
+  } as GoogleAppsScript.URL_Fetch.URLFetchRequestOptions;
+
+  UrlFetchApp.fetch(telegramUrl + '/answerCallbackQuery', options);
+};

@@ -6,6 +6,12 @@ type SendMessageData = {
   reply_markup?: ReplyMarkup;
 };
 
+type answerCallbackQueryData = {
+  callback_query_id: string;
+  text?: string;
+  show_alert?: boolean;
+};
+
 type ReplyMarkup = InlineKeyboardMarkup | ReplyKeyboardMarkup;
 
 type InlineKeyboardButton = {

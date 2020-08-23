@@ -2,10 +2,13 @@ let chat: any;
 function doPost(e: GoogleAppsScript.Events.DoPost) {
   // for further security, only accept requests from those who know the bot token
   const contents = JSON.parse(e.postData.contents);
-  chat = contents.message.chat;
   if (contents.callback_query) {
+    chat = contents.callback_query.message.chat;
     parseCallbackQuery(contents.callback_query.data);
+    answerCallbackQuery(contents.callback_query.id);
+    return;
   }
+  chat = contents.message.chat;
   parseMessage(contents.message.text);
 }
 
