@@ -36,29 +36,40 @@ const botCommandDictionary: BotCommandDictionary = {
   },
   "Today's Breakfast": {
     execute: () => {
-      const breakfast = getBreakfast(getCurrentWeek(), getCurrentDay());
-      sendMessage(parseMeal(breakfast));
+      const currentDay = getCurrentDay();
+      if (currentDay === 7) {
+        return sendMessage('No breakfast on Sundays!');
+      }
+      const breakfast = getBreakfast(getCurrentWeek(), currentDay);
+      sendMessage(`Breakfast on ${generateDateString(new Date())}\n\n${parseMeal(breakfast)}`);
     },
   },
   "Tomorrow's Breakfast": {
     execute: () => {
+      const dayTomorrow = (getCurrentDay() + 1) % 7;
       const breakfast = getBreakfast(
-        getCurrentWeek(),
-        (getCurrentDay() + 1) % 7
+        getCurrentWeek() + (dayTomorrow === 0 ? 1 : 0),
+        dayTomorrow
       );
-      sendMessage(parseMeal(breakfast));
+      const tomorrowDate = new Date();
+      tomorrowDate.setDate(tomorrowDate.getDate() + 1);
+      sendMessage(`Breakfast on ${generateDateString(tomorrowDate)}\n\n${parseMeal(breakfast)}`);
     },
   },
   "Today's Dinner": {
     execute: () => {
-      const dinner = getDinner(getCurrentWeek(), getCurrentDay());
-      sendMessage(parseMeal(dinner));
+      const currentDay = getCurrentDay();
+      const dinner = getDinner(getCurrentWeek(), getDinnerColumn(currentDay));
+      sendMessage(`Dinner on ${generateDateString(new Date())}\n\n${parseMeal(dinner)}`);
     },
   },
   "Tomorrow's Dinner": {
     execute: () => {
-      const dinner = getDinner(getCurrentWeek(), (getCurrentDay() + 1) % 7);
-      sendMessage(parseMeal(dinner));
+      const dayTomorrow = (getCurrentDay() + 1) % 7;
+      const dinner = getDinner(getCurrentWeek() + (dayTomorrow === 0 ? 1 : 0), dayTomorrow);
+      const tomorrowDate = new Date();
+      tomorrowDate.setDate(tomorrowDate.getDate() + 1);
+      sendMessage(`Dinner on ${generateDateString(tomorrowDate)}\n\n${parseMeal(dinner)}`);
     },
   },
   default: {

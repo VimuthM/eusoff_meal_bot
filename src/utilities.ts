@@ -71,3 +71,12 @@ const getCurrentDay = () => {
   // Want monday as 1, tuesday as 2, ... sunday as 7
   return ((new Date().getDay() + 6) % 7) + 1;
 };
+
+const getDinnerColumn = (day: number) => {
+  return day === 7 ? day - 1 : day;
+};
+
+const generateDateString = (date: Date): string => {
+  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  return date.toLocaleDateString('en-us', options);
+};

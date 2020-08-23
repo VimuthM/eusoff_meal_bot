@@ -1,33 +1,24 @@
-let currentUpdate, chat;
-function doPost(e) {
+let chat: any;
+function doPost(e: GoogleAppsScript.Events.DoPost) {
   // for further security, only accept requests from those who know the bot token
   const contents = JSON.parse(e.postData.contents);
-  currentUpdate = contents;
   chat = contents.message.chat;
-  sendMessage(contents);
   if (contents.callback_query) {
     parseCallbackQuery(contents.callback_query.data);
   }
   parseMessage(contents.message.text);
 }
 
-function doGet(e) {
+function doGet(e: GoogleAppsScript.Events.DoGet) {
   deleteWebHook();
   const webHookResponse = setWebHook();
   const botCommandResponse = setBotCommands();
   const currentOutput = HtmlService.createHtmlOutput('<p>start</p>');
+  const botCommands = getBotCommands();
+  currentOutput.append(webHookResponse.getContentText());
+  currentOutput.append(botCommandResponse.getContentText());
   currentOutput.append(
-    webHookResponse.getResponseCode() === 200
-      ? getWebHook().getContentText()
-      : webHookResponse.getContentText()
-  );
-  currentOutput.append(
-    botCommandResponse.getResponseCode() === 200
-      ? botCommandResponse.getContentText()
-      : botCommandResponse.getContentText()
-  );
-  currentOutput.append(
-    '<p>' + botCommands.map((command) => JSON.stringify(command)) + '</p>'
+    '<p>' + botCommands.getContentText() + '</p>'
   );
   return currentOutput;
 }
@@ -39,15 +30,17 @@ function doGet(e) {
 // Parses messages and sends the processed output to sendMessage
 // returns void
 function parseMessage(text: string) {
-  sendMessage('AABB');
   const endOfCommand = text.indexOf(botName);
   const commandName = endOfCommand < 0 ? text : text.substring(0, endOfCommand);
   const command = botCommandDictionary[commandName];
-  command ? command.execute() : botCommandDictionary.default.execute();
+  try {
+    command ? command.execute() : botCommandDictionary.default.execute();
+  } catch (error) {
+    sendMessage('Sorry a bug occured! Please contact Hackers @athuyaoo and tell them about this!')
+  }
 }
 
 const parseCallbackQuery = (callbackData: string) => {
-  sendMessage('AAA');
   if (callbackData[0] !== '>') return;
   const dayNo = callbackData[2];
   if (callbackData[1] === 'B') {
@@ -67,8 +60,8 @@ const parseMeal = (
   meal?: BreakfastObject | DinnerObject | SpecialDinnerObject
 ): string => {
   if (!meal) return 'ERROR';
-  return Object.keys(meal)
-    .map((currentKey) => `<b>${currentKey}</b> - ${meal[currentKey]}`)
+  return Object.entries(meal)
+    .map((entries) => `<b>${entries[0]}</b> - ${entries[1]}`)
     .reduce((output, currentMeal) => output + '\n' + currentMeal);
 };
 
@@ -76,8 +69,10 @@ const parseMeal = (
 // returns Breakfast object
 const getBreakfast = (week: number, day: number) => {
   const sheet = SpreadsheetApp.openById(breakfastMenuSheetId).getSheetByName(
-    `Week ${week}`
+    `Week ${week % 4}`
   );
+  if (!sheet) return;
+
   const column = String.fromCharCode('B'.charCodeAt(0) + day);
   const breakfastData = sheet
     .getRange(`${column}2:${column}14`)
@@ -90,12 +85,14 @@ const getBreakfast = (week: number, day: number) => {
 // Gets details of dinner from the main sheets
 // returns Breakfast object
 const getDinner = (week: number, day: number) => {
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(
+  const sheet = SpreadsheetApp.openById(dinnerMenuSheetId).getSheetByName(
     `Week ${week}`
   );
+  if (!sheet) return;
+
   const column = String.fromCharCode('B'.charCodeAt(0) + day);
   const dinnerData = sheet
-    .getRange(`${column}2:${column}12`)
+    ?.getRange(`${column}2:${column}12`)
     .getValues()
     .map((row) => String(row[0]).trim());
 

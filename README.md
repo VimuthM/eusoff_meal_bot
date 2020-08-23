@@ -23,13 +23,12 @@ To use this, you'll need.
    ```bash
    npm install -g @google/clasp
    ```
-
-2. Run `yarn` to install dependencies
+2. Install [yarn](https://yarnpkg.com/getting-started/install). Run `yarn` to install dependencies
 3. Enable the [Google Apps Script API](https://script.google.com/home/usersettings)
 4. Then login to Google, `clasp login`
 5. Create the google app, `clasp create --title "Eusoff Meal Bot" --type webapp --rootDir ./src`
 6. Add the file order from `.clasp.json.example` into `.clasp.json`.
-7. Copy `secret.js.example` into `secret.js`, replace all placeholder values with your own, except for deployment id.
+7. Copy `secret.js.example` and make a new file `secret.js`, replace all placeholder values with your own, except for deployment id.
 8. Deploy it using `clasp deploy` to get the deployment id.
 
    Take note of the deployment id after `Created version x`
@@ -39,10 +38,10 @@ To use this, you'll need.
    - <<YOUR DEPLOYMENT ID HERE>> @1.
    ```
 
-9. Now set the deployment id in `secret.js` along with the bot token and sheet ids.
+9. Now set the deployment id in `secret.ts` along with the bot token and sheet ids.
 10. Run `clasp push` and `clasp deploy -i <<YOUR DEPLOYMENT ID HERE>>` to push your code to Google Scripts and deploy it again
 11. Run `clasp open` to open it in google script
-12. Click `secret.js`, and click `Run > Run Function > setWebHook`
+12. Click `bot/utility.gs`, and click `Run > Run Function > setWebHook`
 
     Like so
 

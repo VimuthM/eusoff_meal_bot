@@ -28,10 +28,10 @@ const startKeyboard: () => ReplyKeyboardMarkup = () => ({
   keyboard: [
     [
       createKeyboardButtons("Today's Breakfast"),
-      createKeyboardButtons("Tomorrow's Breakfast"),
+      createKeyboardButtons("Today's Dinner"),
     ],
     [
-      createKeyboardButtons("Today's Dinner"),
+      createKeyboardButtons("Tomorrow's Breakfast"),
       createKeyboardButtons("Tomorrow's Dinner"),
     ],
   ],
