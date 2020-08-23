@@ -17,9 +17,7 @@ function doGet(e: GoogleAppsScript.Events.DoGet) {
   const botCommands = getBotCommands();
   currentOutput.append(webHookResponse.getContentText());
   currentOutput.append(botCommandResponse.getContentText());
-  currentOutput.append(
-    '<p>' + botCommands.getContentText() + '</p>'
-  );
+  currentOutput.append('<p>' + botCommands.getContentText() + '</p>');
   return currentOutput;
 }
 
@@ -36,7 +34,9 @@ function parseMessage(text: string) {
   try {
     command ? command.execute() : botCommandDictionary.default.execute();
   } catch (error) {
-    sendMessage('Sorry a bug occured! Please contact Hackers @athuyaoo and tell them about this!')
+    sendMessage(
+      'Sorry a bug occured! Please contact Hackers @athuyaoo and tell them about this!'
+    );
   }
 }
 

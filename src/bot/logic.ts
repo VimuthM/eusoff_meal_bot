@@ -41,7 +41,11 @@ const botCommandDictionary: BotCommandDictionary = {
         return sendMessage('No breakfast on Sundays!');
       }
       const breakfast = getBreakfast(getCurrentWeek(), currentDay);
-      sendMessage(`Breakfast on ${generateDateString(new Date())}\n\n${parseMeal(breakfast)}`);
+      sendMessage(
+        `Breakfast on ${generateDateString(new Date())}\n\n${parseMeal(
+          breakfast
+        )}`
+      );
     },
   },
   "Tomorrow's Breakfast": {
@@ -53,23 +57,34 @@ const botCommandDictionary: BotCommandDictionary = {
       );
       const tomorrowDate = new Date();
       tomorrowDate.setDate(tomorrowDate.getDate() + 1);
-      sendMessage(`Breakfast on ${generateDateString(tomorrowDate)}\n\n${parseMeal(breakfast)}`);
+      sendMessage(
+        `Breakfast on ${generateDateString(tomorrowDate)}\n\n${parseMeal(
+          breakfast
+        )}`
+      );
     },
   },
   "Today's Dinner": {
     execute: () => {
       const currentDay = getCurrentDay();
       const dinner = getDinner(getCurrentWeek(), getDinnerColumn(currentDay));
-      sendMessage(`Dinner on ${generateDateString(new Date())}\n\n${parseMeal(dinner)}`);
+      sendMessage(
+        `Dinner on ${generateDateString(new Date())}\n\n${parseMeal(dinner)}`
+      );
     },
   },
   "Tomorrow's Dinner": {
     execute: () => {
       const dayTomorrow = (getCurrentDay() + 1) % 7;
-      const dinner = getDinner(getCurrentWeek() + (dayTomorrow === 0 ? 1 : 0), dayTomorrow);
+      const dinner = getDinner(
+        getCurrentWeek() + (dayTomorrow === 0 ? 1 : 0),
+        dayTomorrow
+      );
       const tomorrowDate = new Date();
       tomorrowDate.setDate(tomorrowDate.getDate() + 1);
-      sendMessage(`Dinner on ${generateDateString(tomorrowDate)}\n\n${parseMeal(dinner)}`);
+      sendMessage(
+        `Dinner on ${generateDateString(tomorrowDate)}\n\n${parseMeal(dinner)}`
+      );
     },
   },
   default: {
