@@ -1,5 +1,5 @@
 {
   "scriptId": "<<SCRIPT ID FOR CLASP CREATE>>",
   "rootDir": "src/",
-  "filePushOrder": ["src/utilities.ts","src/keyboards.ts"]
+  "filePushOrder": ["src/secret.ts", "src/constants.ts", "src/utilities.ts","src/keyboards.ts"]
 }
