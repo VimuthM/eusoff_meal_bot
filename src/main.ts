@@ -72,7 +72,7 @@ const parseMeal = (
 // returns Breakfast object
 const getBreakfast = (week: number, day: number) => {
   const sheet = SpreadsheetApp.openById(breakfastMenuSheetId).getSheetByName(
-    `Week ${week % 4}`
+    `Week ${week}`
   );
   if (!sheet) return;
 
