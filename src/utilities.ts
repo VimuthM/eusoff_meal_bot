@@ -5,7 +5,10 @@ const generateBreakfast = (
     'Breads and Cakes': breakfastList.slice(0, 3).join(', '),
     'Continental Delights': breakfastList[3],
     'Oriental Delights': breakfastList[4],
-    'Hot Selection': breakfastList.slice(5, 8).join(', '),
+    'Hot Selection': breakfastList
+      .slice(5, 8)
+      .filter((string) => !!string)
+      .join(', '),
     Sides: breakfastList[8],
     Cereal: breakfastList[9],
     'Enriched Bread': breakfastList[10],
@@ -22,7 +25,10 @@ const generateDinner = (dinnerList: string[]): DinnerObject | undefined => {
     Pork: dinnerList[1],
     Chicken: dinnerList[2],
     Seafood: dinnerList[3],
-    Sides: dinnerList.slice(4, 7).join(', '),
+    Sides: dinnerList
+      .slice(4, 7)
+      .filter((string) => !!string)
+      .join(', '),
     Vegetables: dinnerList[7],
     'Soup of the Day': dinnerList[8],
     'Fruit / Dessert': dinnerList[9],
@@ -61,7 +67,7 @@ function getCurrentWeek() {
   const numberOfDays = Math.floor(
     (currentDate.getTime() - START_DATE.getTime()) / SECONDS_IN_DAY
   );
-  const currentWeek = (Math.floor(numberOfDays / 7) % 4) + 1;
+  const currentWeek = (Math.floor(numberOfDays / 7) % 8) + 1;
   return currentWeek;
 }
 

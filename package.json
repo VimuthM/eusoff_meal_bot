@@ -2,7 +2,7 @@
   "name": "eusoff-meal-bot",
   "version": "0.1.0",
   "private": true,
-  "scripts": {    
+  "scripts": {
     "lint": "eslint --ext .js,.ts,.jsx,.tsx src",
     "lint:fix": "eslint --ext .js,.ts,.jsx,.tsx src --fix",
     "format": "prettier --check \"src/**/*.{js,ts,jsx,tsx,scss}\"",
