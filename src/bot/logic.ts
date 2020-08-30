@@ -50,9 +50,9 @@ const botCommandDictionary: BotCommandDictionary = {
   },
   "Tomorrow's Breakfast": {
     execute: () => {
-      const dayTomorrow = (getCurrentDay() + 1) % 7;
+      const dayTomorrow = (getCurrentDay() % 7) + 1;
       const breakfast = getBreakfast(
-        getCurrentWeek() + (dayTomorrow === 0 ? 1 : 0),
+        getCurrentWeek() + (dayTomorrow === 1 ? 1 : 0),
         dayTomorrow
       );
       const tomorrowDate = new Date();
@@ -75,9 +75,9 @@ const botCommandDictionary: BotCommandDictionary = {
   },
   "Tomorrow's Dinner": {
     execute: () => {
-      const dayTomorrow = (getCurrentDay() + 1) % 7;
+      const dayTomorrow = (getCurrentDay() % 7) + 1;
       const dinner = getDinner(
-        getCurrentWeek() + (dayTomorrow === 0 ? 1 : 0),
+        getCurrentWeek() + (dayTomorrow === 1 ? 1 : 0),
         dayTomorrow
       );
       const tomorrowDate = new Date();
