@@ -51,6 +51,9 @@ const botCommandDictionary: BotCommandDictionary = {
   "Tomorrow's Breakfast": {
     execute: () => {
       const dayTomorrow = (getCurrentDay() % 7) + 1;
+      if (dayTomorrow === 7) {
+        return sendMessage('No breakfast on Sundays!');
+      }
       const breakfast = getBreakfast(
         getCurrentWeek() + (dayTomorrow === 1 ? 1 : 0),
         dayTomorrow
@@ -67,6 +70,9 @@ const botCommandDictionary: BotCommandDictionary = {
   "Today's Dinner": {
     execute: () => {
       const currentDay = getCurrentDay();
+      if (currentDay === 6) {
+        return sendMessage('No dinner on Saturdays!');
+      }
       const dinner = getDinner(getCurrentWeek(), getDinnerColumn(currentDay));
       sendMessage(
         `Dinner on ${generateDateString(new Date())}\n\n${parseMeal(dinner)}`
@@ -76,6 +82,9 @@ const botCommandDictionary: BotCommandDictionary = {
   "Tomorrow's Dinner": {
     execute: () => {
       const dayTomorrow = (getCurrentDay() % 7) + 1;
+      if (dayTomorrow === 6) {
+        return sendMessage('No dinner on Saturdays!');
+      }
       const dinner = getDinner(
         getCurrentWeek() + (dayTomorrow === 1 ? 1 : 0),
         dayTomorrow

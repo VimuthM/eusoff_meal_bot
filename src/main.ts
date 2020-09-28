@@ -92,6 +92,7 @@ const getDinner = (week: number, day: number) => {
     `Week ${week}`
   );
   if (!sheet) return;
+  day = day === 7 ? 6 : day;
 
   const column = String.fromCharCode('B'.charCodeAt(0) + day);
   const dinnerData = sheet
