@@ -1,3 +1,5 @@
+Logger = BetterLog.useSpreadsheet(logger);
+
 const generateBreakfast = (
   breakfastList: string[]
 ): BreakfastObject | undefined => {
@@ -6,34 +8,34 @@ const generateBreakfast = (
     'Continental Delights': breakfastList[3],
     'Oriental Delights': breakfastList[4],
     'Hot Selection': breakfastList
-      .slice(5, 8)
+      .slice(5, 7)
       .filter((string) => !!string)
       .join(', '),
-    Sides: breakfastList[8],
-    Cereal: breakfastList[9],
-    'Enriched Bread': breakfastList[10],
-    'Daily Specials': breakfastList[11],
-    Drinks: breakfastList[12],
+    Sides: breakfastList[7],
+    Cereal: breakfastList[8],
+    'Enriched Bread': breakfastList[9],
+    'Daily Specials': breakfastList[10],
+    Drinks: breakfastList.slice(11, 13).join(', '),
   };
 };
 
-const isSpecialDinner = (day: number) => day % 2 === 0;
-
+const isSpecialDinner = (day: number) => day % 2 === 1;
 const generateDinner = (dinnerList: string[]): DinnerObject | undefined => {
-  return {
+  const dinner = {
     Rice: dinnerList[0],
     Pork: dinnerList[1],
     Chicken: dinnerList[2],
     Seafood: dinnerList[3],
     Sides: dinnerList
-      .slice(4, 7)
+      .slice(4, 6)
       .filter((string) => !!string)
       .join(', '),
-    Vegetables: dinnerList[7],
-    'Soup of the Day': dinnerList[8],
-    'Fruit / Dessert': dinnerList[9],
-    Drinks: dinnerList[10],
+    Vegetables: dinnerList[6],
+    'Soup of the Day': dinnerList[7],
+    'Fruit / Dessert': dinnerList[8],
+    Drinks: dinnerList[9],
   };
+  return dinner;
 };
 
 const generateSpecialDinner = (
@@ -41,9 +43,9 @@ const generateSpecialDinner = (
 ): SpecialDinnerObject | undefined => {
   return {
     'Set A': dinnerList[0],
-    'Set B': dinnerList[5],
-    'Fruit / Dessert': dinnerList[9],
-    Drinks: dinnerList[10],
+    'Set B': dinnerList[4],
+    'Fruit / Dessert': dinnerList[8],
+    Drinks: dinnerList[9],
   };
 };
 
@@ -67,7 +69,7 @@ function getCurrentWeek() {
   const numberOfDays = Math.floor(
     (currentDate.getTime() - START_DATE.getTime()) / SECONDS_IN_DAY
   );
-  const currentWeek = (Math.floor(numberOfDays / 7) % 8) + 1;
+  const currentWeek = Math.floor(numberOfDays / 7) + 1;
   return currentWeek;
 }
 

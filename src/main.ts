@@ -1,3 +1,5 @@
+Logger = BetterLog.useSpreadsheet(logger);
+
 let chat: any;
 function doPost(e: GoogleAppsScript.Events.DoPost) {
   // for further security, only accept requests from those who know the bot token
@@ -71,7 +73,7 @@ const parseMeal = (
 // Gets details of breakfast from the main sheets
 // returns Breakfast object
 const getBreakfast = (week: number, day: number) => {
-  const sheet = SpreadsheetApp.openById(breakfastMenuSheetId).getSheetByName(
+  const sheet = SpreadsheetApp.openById(menuSheetId).getSheetByName(
     `Week ${week}`
   );
   if (!sheet) return;
@@ -88,7 +90,7 @@ const getBreakfast = (week: number, day: number) => {
 // Gets details of dinner from the main sheets
 // returns Breakfast object
 const getDinner = (week: number, day: number) => {
-  const sheet = SpreadsheetApp.openById(dinnerMenuSheetId).getSheetByName(
+  const sheet = SpreadsheetApp.openById(menuSheetId).getSheetByName(
     `Week ${week}`
   );
   if (!sheet) return;
@@ -96,7 +98,7 @@ const getDinner = (week: number, day: number) => {
 
   const column = String.fromCharCode('B'.charCodeAt(0) + day);
   const dinnerData = sheet
-    ?.getRange(`${column}2:${column}12`)
+    ?.getRange(`${column}17:${column}26`)
     .getValues()
     .map((row) => String(row[0]).trim());
 

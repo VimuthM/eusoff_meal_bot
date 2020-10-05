@@ -1,7 +1,9 @@
-const setWebHook = () =>
-  UrlFetchApp.fetch(
-    telegramUrl + '/setWebHook?url=' + webHookLink + '?=' + botToken
+const setWebHook = () => {
+  const response = UrlFetchApp.fetch(
+    telegramUrl + '/setWebHook?url=' + webHookLink + '&max_connections=30'
   );
+  return response;
+};
 
 const getWebHook = () => UrlFetchApp.fetch(telegramUrl + '/getWebHookInfo');
 
@@ -14,7 +16,6 @@ const sendMessage = (text: string, replyMarkup?: ReplyMarkup) => {
     reply_markup: replyMarkup,
     parse_mode: 'HTML',
   };
-
   const options = {
     method: 'post',
     contentType: 'application/json',
